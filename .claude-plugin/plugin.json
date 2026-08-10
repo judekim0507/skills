@@ -1,0 +1,11 @@
+{
+  "name": "workflow",
+  "description": "Skills for agentic coding workflows: orchestrating large multi-phase work across models.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jude Kim",
+    "email": "j@udek.im"
+  },
+  "repository": "https://github.com/judekim0507/skills",
+  "license": "MIT"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "jude",
+  "description": "Jude Kim's agent skills: multi-model orchestration for agentic coding.",
+  "owner": {
+    "name": "Jude Kim",
+    "email": "j@udek.im"
+  },
+  "plugins": [
+    {
+      "name": "workflow",
+      "source": "./",
+      "description": "Skills for agentic coding workflows: orchestrating large multi-phase work across models."
+    }
+  ]
+}
