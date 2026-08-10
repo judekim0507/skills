@@ -6,7 +6,18 @@ A collection of agent skills I use for agentic coding.
 
 ## Skills
 
-- [**orchestrate**](skills/orchestrate/SKILL.md): Run large multi-phase work as an orchestrator driving cheaper implementation models, with per-phase gates the orchestrator verifies personally. For refactors, migrations, or anything over ~3 phases or ~500 LOC of change.
+### [orchestrate](skills/orchestrate/SKILL.md)
+
+Run large multi-phase work with one expensive, high-taste model as the orchestrator and cheaper models as the workforce. Built to be driven by **Claude Fable 5**: Fable is too expensive to grind out bulk diffs, but it's an awesome orchestrator — so it plans the phases, writes the briefs, and personally verifies every gate, while **GPT-5.6 Sol** (via the codex CLI) does the bulk implementation and **Claude Opus** handles reviews and user-facing UI work.
+
+The core ideas:
+
+- The orchestrator is architect, reviewer, and integrator — it never merges work it hasn't personally verified.
+- Work is routed by taste and cost: user-facing work needs a high-taste model in the loop, bulk clear-spec work goes to Sol, reviews go to Fable or Opus.
+- Every phase ends with a gate battery the orchestrator runs itself, outside agent sandboxes, including at least one real-world gate (a real build, a real boot) that green test suites can't fake.
+- Parallel fan-out only over disjoint file domains, with contracts frozen first.
+
+Use it for refactors, migrations, or anything over ~3 phases or ~500 LOC of change. Loosely inspired by [Theo](https://t3.gg)'s takes on model routing.
 
 ## Install
 
