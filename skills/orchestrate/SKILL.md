@@ -1,7 +1,7 @@
 ---
 name: orchestrate
 description: Run large multi-phase work as an orchestrator driving cheaper implementation
-  models (GPT-5.6 Sol via codex, Opus for UI/reviews), with per-phase gates the
+  models (GPT-5.6 Sol via codex — almost exclusively), with per-phase gates the
   orchestrator verifies personally. Use for refactors, migrations, or any work >~3
   phases or >~500 LOC of change.
 ---
@@ -16,14 +16,17 @@ merge work you haven't personally verified.
 | Model | Intelligence | Taste | Cost | Use for |
 |---|---|---|---|---|
 | Fable 5 (you) | ~9–10 | ~9–10 | high | architecture, end-to-end judgment, final reviews, orchestration |
-| GPT-5.6 Sol (via codex CLI) | ~8–9 | ~7 | cheap | bulk/mechanical work, clear-spec implementation, migrations, data analysis, computer use, UI/UX *verification* |
-| Opus 5 | high-ish | ~8 | medium | reviews, API design, SDK work, user-facing UI (better at UI than Sol) |
-| Sonnet 5 | medium | medium | medium | sub-agent plumbing inside workflows (proxy relays, glue) |
+| GPT-5.6 Sol (via codex CLI) | ~8–9 | ~7 | cheap | THE implementer for non-UI work: bulk and clear-spec code, migrations, data analysis, computer use, independent reviews. **Never UI.** |
+| GPT-5.6 Luna (via codex CLI, `codex exec -m gpt-5.6-luna -c model_reasoning_effort="xhigh"` — always max effort) | good | — | very cheap, fast | small tasks: exploring, mapping the codebase, locating seams, summarising docs, one-off lookups. Use it instead of Explore/Sonnet subagents for reconnaissance. |
+| Opus 5 | — | — | very high | **NEVER as a subagent** (Jude, 2026-09-04: far too expensive and weaker than Sonnet 5). Do not dispatch it for anything. |
+| Sonnet 5 | medium | medium | medium | proxy relays / workflow glue only. Never implements. |
 
-Rules of thumb: anything **user-facing needs high taste** → Fable/Opus in the
-loop. **Bulk or clear-spec** → Sol. **Reviews** → Fable or Opus, optionally Sol
-as an independent third perspective. Keep Fable's own token burn low: it plans,
-briefs, verifies, and fixes surgically — it does not grind out bulk diffs.
+Rules of thumb: **Sol does almost all non-UI work; Luna at max effort does the
+small stuff (exploration, mapping). UI work is Fable's own — never handed to
+Sol or any subagent.** **Reviews** →
+Fable, optionally Sol as an independent second perspective. Keep Fable's own
+token burn low: it plans, briefs, verifies, and fixes surgically — it does not
+grind out bulk diffs.
 
 ## Driving Sol through the proxy
 Sonnet subagent relays the brief to `codex exec` **word for word** and returns the
@@ -63,7 +66,7 @@ explicitly (path-depth changes, lockfile rules, framework quirks).
   before believing "nothing happened" — detached work often completed anyway.
 
 ## Review lanes
-- Opus reviews each unit **against ground truth** (the untouched originals), not
+- Fable (or Sol) reviews each unit **against ground truth** (the untouched originals), not
   against the diff's own claims. Ask for severity + file:line + the divergent
   original line. Have it try to *refute* correctness, statuses, header/order
   semantics, and test quality — green suites hide real defects.
